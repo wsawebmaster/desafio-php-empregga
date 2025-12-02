@@ -46,18 +46,22 @@ Access: http://127.0.0.1:8181
 ```
 src/
 ├── Domain/           # Contact, Phone models
-├── Repository/       # Data access layer
+├── Repository/       # Data access layer with interfaces
 ├── Http/
-│   ├── Controller/   # API logic
-│   ├── Router.php    # URL routing
-│   ├── Request.php   # Input abstraction
-│   └── JsonResponse.php
+│   ├── Controller/   # API endpoint handlers
+│   ├── Router.php    # URL routing engine
+│   ├── Request.php   # HTTP input abstraction
+│   └── JsonResponse.php # HTTP response helpers
+├── Infrastructure/   # Database connection
 ├── Validation/       # Input validators
-├── Exception/        # Custom exceptions
+├── Autoloader.php    # PSR-4 class loader
 └── Config.php        # Configuration
 
 public/
-└── index.php         # Entry point (API + Vue.js UI)
+└── index.php         # Entry point (API routes + Vue.js UI)
+
+tests/
+└── run.php           # Test suite with colored output
 ```
 
 ## 💾 Database Schema
@@ -125,9 +129,14 @@ Access: `http://127.0.0.1:8181/swagger/`
 
 ## 🔧 Environment Variables
 
+Optional MySQL configuration (defaults to SQLite if not set):
+
 ```
-DB_HOST=127.0.0.1
-DB_NAME=contacts
-DB_USER=contacts_user
-DB_PASS=strong_password
+DB_HOST=127.0.0.1        # Default: 127.0.0.1
+DB_NAME=contacts         # Default: contacts
+DB_USER=root             # Default: root
+DB_PASS=                 # Default: (empty)
 ```
+
+SQLite database file: `data/contacts.sqlite` (auto-created on first run)
+
