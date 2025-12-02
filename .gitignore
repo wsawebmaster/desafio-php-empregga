@@ -1,0 +1,5 @@
+data/*.sqlite
+vendor/
+.DS_Store
+*.log
+

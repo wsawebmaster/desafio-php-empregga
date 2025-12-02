@@ -1,0 +1,42 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Contacts API",
+    "version": "1.0.0"
+  },
+  "servers": [ { "url": "/api" } ],
+  "paths": {
+    "/contacts": {
+      "get": {
+        "summary": "List contacts",
+        "parameters": [
+          {"name":"page","in":"query","schema":{"type":"integer","default":1}},
+          {"name":"per_page","in":"query","schema":{"type":"integer","default":10}},
+          {"name":"search","in":"query","schema":{"type":"string"}}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      },
+      "post": {
+        "summary": "Create contact",
+        "requestBody": {"required": true, "content": {"application/json": {"schema": {
+          "type":"object","properties":{
+            "name":{"type":"string"},"email":{"type":"string"},"address":{"type":"string"},
+            "phones":{"type":"array","items":{"type":"object","properties":{"number":{"type":"string"},"label":{"type":"string"}}}}
+          },"required":["name","email","address","phones"]
+        }}}},
+        "responses": {"201": {"description": "Created"}, "409": {"description": "Duplicate email"}, "422": {"description": "Validation error"}}
+      }
+    },
+    "/contacts/{id}": {
+      "get": {"summary": "Get contact", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}},
+      "put": {"summary": "Update contact", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "requestBody": {"required": true, "content": {"application/json": {"schema": {"type":"object","properties":{"name":{"type":"string"},"email":{"type":"string"},"address":{"type":"string"}}}}}}, "responses": {"200": {"description": "OK"}, "409": {"description": "Duplicate email"}, "422": {"description": "Validation error"}}},
+      "delete": {"summary": "Delete contact", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": {"204": {"description": "No Content"}, "404": {"description": "Not Found"}}}
+    },
+    "/contacts/{id}/phones": {
+      "post": {"summary": "Add phone", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "requestBody": {"required": true, "content": {"application/json": {"schema": {"type":"object","properties":{"number":{"type":"string"},"label":{"type":"string"}}, "required":["number"]}}}}, "responses": {"201": {"description": "Created"}, "422": {"description": "Validation error"}}}
+    },
+    "/contacts/{id}/phones/{phoneId}": {
+      "delete": {"summary": "Remove phone", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}},{"name":"phoneId","in":"path","required":true,"schema":{"type":"integer"}}], "responses": {"204": {"description": "No Content"}, "422": {"description": "At least one phone required"}, "404": {"description": "Not Found"}}}
+    }
+  }
+}
